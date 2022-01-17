@@ -1,0 +1,77 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8s-node-watchdog
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8s-node-watchdog
+  labels:
+    app: k8s-node-watchdog
+  namespace: k8s-node-watchdog
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: k8s-node-watchdog
+  labels:
+    app: k8s-node-watchdog
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: k8s-node-watchdog
+  labels:
+    app: k8s-node-watchdog
+roleRef:
+  kind: ClusterRole
+  name: k8s-node-watchdog
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: k8s-node-watchdog
+    namespace: k8s-node-watchdog
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: k8s-node-watchdog
+  namespace: k8s-node-watchdog
+  labels:
+    k8s-app: k8s-node-watchdog
+spec:
+  selector:
+    matchLabels:
+      name: k8s-node-watchdog
+  template:
+    metadata:
+      labels:
+        name: k8s-node-watchdog
+    spec:
+      tolerations:
+        - key: scaleToZero
+          operator: Equal
+          value: "yes"
+          effect: NoExecute
+      serviceAccountName: k8s-node-watchdog
+      hostIPC: true
+      hostPID: true
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: k8s-node-watchdog
+          image: mattipaksula/k8s-node-watchdog
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          resources:
+            limits:
+              memory: 1024Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
