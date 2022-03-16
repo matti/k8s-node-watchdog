@@ -3,4 +3,4 @@ version: '3'
 services:
   app:
     build: .
-    image: mattipaksula/k8s-node-watchdog
+    image: mattipaksula/k8s-node-watchdog:edge
