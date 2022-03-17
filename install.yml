@@ -1,8 +1,18 @@
 ---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: k8s-node-watchdog
+  labels:
+    app: k8s-node-watchdog
+value: 10000
+globalDefault: false
+---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: k8s-node-watchdog
+  namespace: k8s-node-watchdog
   labels:
     app: k8s-node-watchdog
 ---
@@ -66,6 +76,7 @@ spec:
       hostIPC: true
       hostPID: true
       terminationGracePeriodSeconds: 0
+      priorityClassName: k8s-node-watchdog
       containers:
         - name: k8s-node-watchdog
           image: mattipaksula/k8s-node-watchdog:edge
@@ -78,3 +89,10 @@ spec:
             requests:
               cpu: 10m
               memory: 32Mi
+          volumeMounts:
+            - mountPath: /k8s-node-watchdog
+              name: k8s-node-watchdog
+      volumes:
+        - name: k8s-node-watchdog
+          hostPath:
+            path: /k8s-node-watchdog
