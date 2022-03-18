@@ -75,6 +75,8 @@ while true; do
           kubectl patch deployment -n kube-system coredns --patch-file /app/tolerations.yml || echo "patching coredns failed"
 
           kubectl apply -f /app/coredns-pdb.yml || echo "coredns pdb apply failed"
+
+          kubectl autoscale deployment coredns -n kube-system --cpu-percent=5 --min=2 --max=9 || echo "autoscale coredns apply failed"
         ;;
       esac
     fi
