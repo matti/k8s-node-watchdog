@@ -73,6 +73,8 @@ while true; do
           kubectl annotate pod -n kube-system -l eks.amazonaws.com/component=coredns "cluster-autoscaler.kubernetes.io/safe-to-evict=true" || echo "annotating coredns failed"
 
           kubectl patch deployment -n kube-system coredns --patch-file /app/tolerations.yml || echo "patching coredns failed"
+
+          kubectl apply -f /app/coredns-pdb.yml || echo "coredns pdb apply failed"
         ;;
       esac
     fi
