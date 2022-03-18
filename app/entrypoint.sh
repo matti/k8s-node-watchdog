@@ -71,6 +71,8 @@ while true; do
           kubectl label node "${NODE_HOSTNAME}" --overwrite=true "node-role.kubernetes.io/${nodegroup}=yes" || echo "node labeling failed"
 
           kubectl annotate pod -n kube-system -l eks.amazonaws.com/component=coredns "cluster-autoscaler.kubernetes.io/safe-to-evict=true" || echo "annotating coredns failed"
+
+          kubectl patch deployment -n kube-system coredns --patch-file /app/tolerations.yml || echo "patching coredns failed"
         ;;
       esac
     fi
