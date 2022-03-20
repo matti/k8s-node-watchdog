@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+kubectl apply -f install.yml
+kubectl delete pod -n k8s-node-watchdog -l app=k8s-node-watchdog
