@@ -78,7 +78,8 @@ while true; do
 
           kubectl apply -f /app/coredns-pdb.yml || echo "coredns pdb apply failed"
 
-          kubectl patch daemonset -n kube-system aws-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/livenessProbe/initialDelaySeconds", "value":1}]'
+          # see https://github.com/aws/amazon-vpc-cni-k8s/issues/1930
+          #kubectl patch daemonset -n kube-system aws-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/livenessProbe/initialDelaySeconds", "value":1}]'
 
           #kubectl patch deployment -n kube-system coredns --patch-file /app/coredns-topologyspreadconstraints.yml || echo "patching coredns topologySpreadConstraints failed"
           #kubectl autoscale deployment coredns -n kube-system --cpu-percent=5 --min=2 --max=9 || echo "autoscale coredns apply failed"
