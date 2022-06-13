@@ -6,7 +6,7 @@ echo "start;$(date);$(uptime)" >> /k8s-node-watchdog/log
 OS_RELEASE_ID=$(nsenter -t 1 -m -u -i -n -- awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
 if nsenter -t 1 -m -u -i -n -- test -f /etc/google_instance_id; then
   PROVIDER="gke"
-elif [ "$OS_RELEASE_ID"="amzn" ]; then
+elif [[ "$OS_RELEASE_ID" == "amzn" ]]; then
   PROVIDER="aws"
 else
   PROVIDER="unknown"
@@ -37,7 +37,7 @@ case "$PROVIDER" in
     esac
   ;;
   aws)
-
+    echo "no startup tasks for aws"
   ;;
   *)
     echo "unsupported provider: ${PROVIDER}"
