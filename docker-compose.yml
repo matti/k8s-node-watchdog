@@ -2,5 +2,13 @@ version: '3'
 
 services:
   app:
-    build: .
-    image: mattipaksula/k8s-node-watchdog:edge
+    build:
+      context: .
+      x-bake:
+        tags:
+          - ghcr.io/${GITHUB_REPOSITORY}:latest
+          - ghcr.io/${GITHUB_REPOSITORY}:${GITHUB_SHA}
+          - ghcr.io/${GITHUB_REPOSITORY}:${GITHUB_REF_NAME}
+        platforms:
+          - linux/arm64
+          - linux/amd64
