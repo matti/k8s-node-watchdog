@@ -70,7 +70,7 @@ spec:
       priorityClassName: system-node-critical
       containers:
         - name: k8s-node-watchdog
-          image: ghcr.io/matti/k8s-node-watchdog:latest
+          image: ghcr.io/matti/k8s-node-watchdog:c439569ddb5eeb7d0638f0358316e202c24a175a
           imagePullPolicy: Always
           securityContext:
             privileged: true
